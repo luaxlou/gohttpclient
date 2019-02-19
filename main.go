@@ -175,12 +175,7 @@ func (c *GoHttpClient) StatusCode() (int) {
 	return c.statusCode
 }
 
-func (c *GoHttpClient) Body() []byte {
+func (c *GoHttpClient) Bytes() (int, []byte, error) {
 
-	if !c.executed {
-		return nil
-
-	}
-
-	return c.body
+	return c.StatusCode(), c.body, c.GetError()
 }

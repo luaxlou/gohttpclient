@@ -14,7 +14,26 @@ code,body,err :=gohttpclient.Get("https://www.baidu.com").Exec().String()
 
 if err != nil {
     //http请求过程中产生的错误，url不对？，网络异常？等等。
-		t.Fatal("error:", err)
+}
+
+if code != http.StatusOK {
+    //根据response code可以做一些处理，和其他错误分开比较好。
+}
+
+```
+
+
+```
+var reqObj XXReqesutObj
+
+var resObj XXResObj
+
+
+code,err :=gohttpclient.PostBody(url,&reqObj).Exec().RenderJSON(&resObj)
+
+
+if err != nil {
+    //http请求过程中产生的错误，url不对？，网络异常？等等。
 }
 
 if code != http.StatusOK {

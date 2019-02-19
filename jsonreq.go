@@ -5,7 +5,15 @@ import (
 )
 
 func (c *GoHttpClient) addApplicationJsonHeader() {
-	c.req.Header.Set("Content-Type", "application/json")
+	c.Header("Content-Type", "application/json")
+
+}
+
+func (c *GoHttpClient) Header(k, v string)  *GoHttpClient {
+
+	c.req.Header.Set(k, v)
+
+	return c
 
 }
 

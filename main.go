@@ -174,3 +174,13 @@ func (c *GoHttpClient) StatusCode() (int) {
 
 	return c.statusCode
 }
+
+func (c *GoHttpClient) Body() []byte {
+
+	if !c.executed {
+		return nil
+
+	}
+
+	return c.body
+}

@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"bytes"
 	"io/ioutil"
-	"net/url"
 	"errors"
 	"crypto/tls"
 )
@@ -95,11 +94,11 @@ func (c *GoHttpClient) Query(k, v string) *GoHttpClient  {
 //Add post form k,v
 func (c *GoHttpClient) Form(k, v string)  *GoHttpClient  {
 
-	if c.req.Form == nil {
-		c.req.Form = url.Values{}
-	}
+	c.req.ParseForm()
 
-	c.req.Form.Add(k, v)
+	c.req.Form.Add(k, k)
+
+
 	return c
 
 }

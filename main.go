@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/url"
 	"errors"
+	"crypto/tls"
 )
 
 type GoHttpClient struct {
@@ -80,24 +81,26 @@ func Raw(url string, bs []byte) *GoHttpClient {
 }
 
 //Add query k,v
-func (c *GoHttpClient) Query(k, v string) {
+func (c *GoHttpClient) Query(k, v string) *GoHttpClient  {
 
 	q := c.req.URL.Query()
 
 	q.Add(k, v)
 
 	c.req.URL.RawQuery = q.Encode()
+	return c
 
 }
 
 //Add post form k,v
-func (c *GoHttpClient) Form(k, v string) {
+func (c *GoHttpClient) Form(k, v string)  *GoHttpClient  {
 
 	if c.req.Form == nil {
 		c.req.Form = url.Values{}
 	}
 
-	c.req.PostForm.Add(k, v)
+	c.req.Form.Add(k, v)
+	return c
 
 }
 
@@ -109,7 +112,12 @@ func (c *GoHttpClient) Exec() *GoHttpClient {
 	if c.req == nil {
 		return c
 	}
-	client := &http.Client{}
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+
+	client := &http.Client{Transport: tr}
 	resp, err := client.Do(c.req)
 
 	if err != nil {

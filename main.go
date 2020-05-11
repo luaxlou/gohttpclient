@@ -1,11 +1,12 @@
 package gohttpclient
 
 import (
-	"net/http"
 	"bytes"
-	"io/ioutil"
-	"errors"
 	"crypto/tls"
+	"errors"
+	"io/ioutil"
+	"log"
+	"net/http"
 )
 
 type GoHttpClient struct {
@@ -16,6 +17,8 @@ type GoHttpClient struct {
 	err error
 
 	executed bool
+
+	debug bool
 
 	statusCode int
 }
@@ -80,7 +83,7 @@ func Raw(url string, bs []byte) *GoHttpClient {
 }
 
 //Add query k,v
-func (c *GoHttpClient) Query(k, v string) *GoHttpClient  {
+func (c *GoHttpClient) Query(k, v string) *GoHttpClient {
 
 	q := c.req.URL.Query()
 
@@ -92,12 +95,11 @@ func (c *GoHttpClient) Query(k, v string) *GoHttpClient  {
 }
 
 //Add post form k,v
-func (c *GoHttpClient) Form(k, v string)  *GoHttpClient  {
+func (c *GoHttpClient) Form(k, v string) *GoHttpClient {
 
 	c.req.ParseForm()
 
 	c.req.Form.Add(k, k)
-
 
 	return c
 
@@ -127,6 +129,10 @@ func (c *GoHttpClient) Exec() *GoHttpClient {
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
+
+	if c.debug {
+		log.Println(string(body))
+	}
 
 	c.statusCode = resp.StatusCode
 
@@ -172,7 +178,7 @@ func (c *GoHttpClient) String() (int, string, error) {
 	return c.StatusCode(), string(c.body), nil
 }
 
-func (c *GoHttpClient) StatusCode() (int) {
+func (c *GoHttpClient) StatusCode() int {
 
 	if !c.executed {
 		return 0
@@ -185,4 +191,10 @@ func (c *GoHttpClient) StatusCode() (int) {
 func (c *GoHttpClient) Bytes() (int, []byte, error) {
 
 	return c.StatusCode(), c.body, c.GetError()
+}
+
+func (c *GoHttpClient) Debug() *GoHttpClient {
+
+	c.debug = true
+	return c
 }

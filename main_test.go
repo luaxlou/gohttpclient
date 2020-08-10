@@ -18,7 +18,7 @@ func TestGet(t *testing.T) {
 
 func TestPost(t *testing.T) {
 
-	res := Post("http://jd.com/pageNotExists").Exec()
+	res := Post("http://jd.com/pageNotExists").Form("a","b").Exec()
 
 	i, s, err := res.String()
 

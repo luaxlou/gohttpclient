@@ -99,7 +99,7 @@ func (c *GoHttpClient) Form(k, v string) *GoHttpClient {
 
 	c.req.ParseForm()
 
-	c.req.Form.Add(k, k)
+	c.req.Form.Add(k, v)
 
 	return c
 

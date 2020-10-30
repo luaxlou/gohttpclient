@@ -121,12 +121,16 @@ func (c *GoHttpClient) Exec() *GoHttpClient {
 	client := &http.Client{Transport: tr}
 	resp, err := client.Do(c.req)
 
+	defer func() {
+		if resp != nil {
+			resp.Body.Close()
+		}
+	}()
+
 	if err != nil {
 		c.err = err
 		return c
 	}
-
-	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 

@@ -125,6 +125,8 @@ func (c *GoHttpClient) Exec() *GoHttpClient {
 		if resp != nil {
 			resp.Body.Close()
 		}
+		client.CloseIdleConnections()
+
 	}()
 
 	if err != nil {
